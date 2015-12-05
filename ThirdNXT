@@ -1,0 +1,28 @@
+/*
+This code is on the NXT that controls the first conveyer and the bread conveyer.
+It does not connect to bluetooth so the commands are recieved through interactions
+with touch sensors.
+*/
+task main() // Written by Cameron Blair
+{
+SensorType[S1] = sensorTouch; // the touch sensor that is hit by the arm
+SensorType[S2] = sensorTouch; // the touch sensor that is bumbed by the touch sensor on the car
+for (int i = 0; i < 2; i++) // runs for 2 cycles because it has up to 2 interactions per run.
+{
+	while (SensorValue[S1] == 0 && SensorValue[S2] == 0) // waits for one of the sensors to be hit
+		{}
+	if (SensorValue[S1] == 1)//  if it is the first on it runs the cheese conveyer belt
+	{
+		motor(motorA) = -100;
+		wait1Msec(2000);
+		motor(motorA) = 0;
+	}
+	if (SensorValue[S2] == 1) // if the bread bumber is the one that hits.
+	{
+		motor(motorB) = -50;
+		wait1Msec(1000);
+		motor(motorB) = 0;
+	}
+	wait1Msec(3000); // waits 3 seconds before ending to allow all processes to finish.
+}
+}
