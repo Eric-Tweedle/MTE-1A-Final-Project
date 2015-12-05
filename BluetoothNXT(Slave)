@@ -1,0 +1,49 @@
+/*
+This code is the code that is present on the NXT controling 2 of the conveyer
+belts and the condiment dispenser. The NXT will revcieve input from the NXT
+running Main through bluetooth.
+*/
+const float PLUNGER = 1.2*180/PI*4; // Global constant for the length the condiment dispenser motor needs to travel
+
+void RunConveyer(int num)//  Written by Morgan Yeung
+/*
+This function runs a conveyer belt or the condiment dispenser based on the message it receives from
+the other NXT.
+*/
+{
+	if (num == 3) // The integer message of 3 represents meat
+	{
+		motor(motorC) = -100;
+		while	(nMotorEncoder(motorC) > -720) // runs for two full rotations
+		{}
+		motor(motorC) = 0;
+	}
+	if (num == 2)// The integer message of 2 represents lettuce
+	{
+		motor(motorB) = -100;
+		while	(nMotorEncoder(motorB) > -720)
+		{}
+		motor(motorB) = 0;
+	}
+	if (num == 4) // The interger message of 4 represents condiments
+	{
+		motor(motorA) = -50;
+		while (nMotorEncoder(motorA) < PLUNGER) // turns the amount defined by the constant PLUNGER
+		{}
+		motor(motorA) = 0;
+	}
+}
+
+task main() // written by Ben Holmes
+{
+	ClearMessage(); // clears the message input. For when it is not cleared in the previous run
+	int my_message = 0;
+	while (my_message != 9) // runs a loop until it recieves a message of 9. Indicating it no longer needs to run
+ {
+	my_message = message; // sets a variable to the incoming message
+	if (my_message != 0) // waits for a message to be sent and change the variable my_message.
+		RunConveyer(my_message); // which topping is decided by run conveyer
+	wait1Msec(500);
+	ClearMessage(); // clears the message and waits for the next one.
+	}
+}
